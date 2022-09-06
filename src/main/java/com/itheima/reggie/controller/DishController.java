@@ -107,7 +107,7 @@ public class DishController {
     public R<String> update(@RequestBody DishDto dishDto) {
         log.info("dishDto:{}", dishDto);
         dishService.updateWithFlavor(dishDto);
-        return R.success("新增菜品成功");
+        return R.success("更新菜品成功");
     }
 
 }
