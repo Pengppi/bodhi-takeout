@@ -1,10 +1,9 @@
 package com.itheima.reggie.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,7 +17,6 @@ public class Setmeal implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-
 
     //分类id
     private Long categoryId;
