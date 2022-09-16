@@ -9,6 +9,7 @@ package com.itheima.reggie.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.itheima.reggie.common.R;
 import com.itheima.reggie.entity.User;
+import com.itheima.reggie.service.SendMailService;
 import com.itheima.reggie.service.UserService;
 import com.itheima.reggie.utils.ValidateCodeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,9 @@ public class UserController {
     @Autowired
     private UserService userservice;
 
+    @Autowired
+    private SendMailService sendMailService;
+
     /**
      * 发送手机短信验证码
      *
@@ -37,7 +41,7 @@ public class UserController {
      * @param session
      * @return
      */
-    @PostMapping("/sendMsg")
+    @PostMapping("/sendMsg1")
     public R<String> sendMsg(@RequestBody User user, HttpSession session) {
         //获取手机号
         String phone = user.getPhone();
@@ -55,6 +59,27 @@ public class UserController {
         return R.error("短信发送失败");
     }
 
+
+    @PostMapping("/sendMsg")
+    public R<String> sendMailMsg(@RequestBody User user, HttpSession session) {
+        //获取手机号
+        String phone = user.getPhone();
+        log.info(phone);
+        if (StringUtils.isNotEmpty(phone)) {
+            //生成随机的4位验证码
+            String code = ValidateCodeUtils.generateValidateCode(4).toString();
+            log.info("验证码:{}", code);
+            //调用阿里云提供的短信服务api完成发送短信
+            //SMSUtils.sendMessage("吴鹏", "", phone, code);
+            //需要将生成的验证码保存到Session
+            session.setAttribute(phone, code);
+            sendMailService.sendLoginCode(phone, code);
+
+            return R.success("邮箱验证码发送成功");
+        }
+        return R.error("邮箱验证码发送失败");
+    }
+
     /**
      * 移动端用户登录
      *
@@ -70,8 +95,8 @@ public class UserController {
         //获取验证码
         String code = map.get("code").toString();
         //从session中获取保存的验证码
-        log.info("flg");
         Object codeInSession = session.getAttribute(phone);
+        log.info("codeInSession:{}", codeInSession);
         //比较验证码是否一致（页面提交的验证码和session中保存的验证码比对）
         if (codeInSession != null && codeInSession.equals(code)) {
             //如果比对成功，说明登录成功
