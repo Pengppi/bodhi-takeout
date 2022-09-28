@@ -73,7 +73,7 @@ public class UserController {
             //SMSUtils.sendMessage("吴鹏", "", phone, code);
             //需要将生成的验证码保存到Session
             session.setAttribute(phone, code);
-            sendMailService.sendLoginCode(phone, code);
+            //sendMailService.sendLoginCode(phone, code);
 
             return R.success("邮箱验证码发送成功");
         }
