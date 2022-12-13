@@ -18,7 +18,6 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -133,10 +132,10 @@ public class EmployeeController {
     @PutMapping
     public R<String> update(@RequestBody Employee employee, HttpServletRequest request) {
         log.info(employee.toString());
-    
+
         long id = Thread.currentThread().getId();
         log.info("当前线程id为：{}", id);
-        
+
         // employee.setUpdateTime(LocalDateTime.now());
         // employee.setUpdateUser((Long) request.getSession().getAttribute("employee"));
         employeeService.updateById(employee);
